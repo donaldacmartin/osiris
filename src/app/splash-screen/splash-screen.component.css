@@ -1,10 +1,29 @@
-img {
+.title-img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    max-width: 10em;
     width: 60%;
     padding-top: 2em;
     padding-bottom: 2em;
+}
+
+button {
+    border: none;
+    background-color: white;
+}
+
+.sign-in-img {
+    max-width: 15em;
+    content: url("/assets/google/button-normal.png");
+}
+
+.sign-in-img:focus {
+    content: url("/assets/google/button-focus.png");
+}
+
+.sign-in-img:active {
+    content: url("/assets/google/button-pressed.png");
 }
 
 p {
