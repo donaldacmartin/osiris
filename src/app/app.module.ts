@@ -7,12 +7,14 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider} from 'angularx-social-login';
+import { ErrorScreenComponent } from './error-screen/error-screen.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SplashScreenComponent,
+    ErrorScreenComponent,
   ],
   imports: [
     BrowserModule,
