@@ -16,11 +16,14 @@ export class ErrorScreenComponent implements OnInit {
   errorCode: String = "";
   errorText: String = "";
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.errorCode = this.router.getCurrentNavigation()?.extras.state?.['errorCode'];
+    this.errorText = this.router.getCurrentNavigation()?.extras.state?.['errorText'];
+  }
 
   ngOnInit(): void {
-    this.errorCode = this.router.getCurrentNavigation()?.extras.state?.['errorCode'] || DEFAULT_CODE;
-    this.errorText = this.router.getCurrentNavigation()?.extras.state?.['errorText'] || DEFAULT_MSG;
+    this.errorCode = this.router.getCurrentNavigation()?.extras.state!['errorCode'];
+    this.errorText = this.router.getCurrentNavigation()?.extras.state!['errorText'];
   }
 
   redirect() {
