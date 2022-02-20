@@ -1,1 +1,6 @@
-<p> {{ user ? user.name : "None" }} </p>
+<app-title-bar [message]="titleText"></app-title-bar>
+<div class="error-page">
+    <p class="mat-headline">{{ this.errorCode }}</p>
+    <p class="mat-body">{{ this.errorText }}</p>
+    <button mat-raised-button color="warn" (click)="this.redirect()">↻</button>
+</div>

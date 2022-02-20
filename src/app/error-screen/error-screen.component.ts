@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialAuthService, SocialUser } from "angularx-social-login";
-
 import { Router } from '@angular/router';
+
+const DEFAULT_CODE = "Unknown error";
+const DEFAULT_MSG = "An error has occurred, but no information was provided";
 
 @Component({
   selector: 'app-error-screen',
@@ -9,19 +10,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./error-screen.component.css']
 })
 export class ErrorScreenComponent implements OnInit {
+  
+  titleText: String = "Something went wrong!";
 
-  user!: SocialUser;
+  errorCode: String = "";
+  errorText: String = "";
 
-  constructor(private router: Router, private authService: SocialAuthService) { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.authState.subscribe(user => {
-      this.user = user;
-    });
+    this.errorCode = this.router.getCurrentNavigation()?.extras.state?.['errorCode'] || DEFAULT_CODE;
+    this.errorText = this.router.getCurrentNavigation()?.extras.state?.['errorText'] || DEFAULT_MSG;
+  }
 
-    if (!this.user) {
-      this.router.navigate(["/"]);
-    }
+  redirect() {
+    this.router.navigate(["/"]);
   }
 
 }

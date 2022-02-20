@@ -4,23 +4,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider} from 'angularx-social-login';
 import { ErrorScreenComponent } from './error-screen/error-screen.component';
+import { TitleBarComponent } from './title-bar/title-bar.component';
+import { MatButtonModule } from '@angular/material/button';
 
+
+const materialModules = [
+  MatButtonModule
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     SplashScreenComponent,
     ErrorScreenComponent,
+    TitleBarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SocialLoginModule
+    SocialLoginModule,
+    ...materialModules
+  ],
+  exports: [
+    ...materialModules,
   ],
   providers: [
     {

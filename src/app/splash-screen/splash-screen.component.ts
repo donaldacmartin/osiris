@@ -19,7 +19,12 @@ export class SplashScreenComponent implements OnInit {
   ngOnInit(): void {
     this.authService.authState.subscribe(user => {
       if (user) {
-        this.router.navigate(["/error"])
+        this.router.navigate(
+          ["/error"],
+          {state:
+            {errorCode: "Not yet implemented",
+            errorText: `Hello, ${user.name}: this feature is not yet ready`
+          }})
       }
     });
   }
