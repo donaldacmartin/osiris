@@ -27,4 +27,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OSIRIS_341815 }}'
           projectId: osiris-341815
-          channelId: '${{ github.event.number }}-${{ github.event.push.commits[0][id] }}'
+          channelId: '${{ github.event.number }}-${{ github.event.push.after }}'
