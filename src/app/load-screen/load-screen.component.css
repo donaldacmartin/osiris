@@ -1,0 +1,7 @@
+.loading-page {
+  margin-top: 1em;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+}

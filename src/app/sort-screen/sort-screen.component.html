@@ -1,0 +1,15 @@
+<app-title-bar [message]="message"></app-title-bar>
+
+<mat-list cdkDropList (cdkDropListDropped)="drop($event)">
+  <div *ngFor="let video of videos">
+    <mat-list-item cdkDrag>
+      <img src="{{ getImgSrc(video) }}" />
+      <p class="mat-small">{{ video.snippet!.title }}</p>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </div>
+</mat-list>
+
+<div class="selectors">
+  <button mat-raised-button color="yes" (click)="this.done()">&gt;</button>
+</div>

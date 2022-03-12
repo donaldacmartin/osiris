@@ -1,0 +1,13 @@
+<app-title-bar [message]="message"></app-title-bar>
+
+<app-video-profile-view [video]="currentVideo"></app-video-profile-view>
+
+<div class="selectors">
+  <button mat-raised-button color="no" (click)="this.reject()">X</button>
+  <button mat-raised-button color="yes" (click)="this.accept()">✓</button>
+</div>
+
+<mat-progress-bar
+  mode="determinate"
+  value="{{ this.progress() }}"
+></mat-progress-bar>
