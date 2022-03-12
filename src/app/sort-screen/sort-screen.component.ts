@@ -46,7 +46,11 @@ export class SortScreenComponent implements OnInit {
       );
 
     this.youtubeService
-      .createPlaylist(playlistTitle(), resources, localStorage.getItem('token')!)
-      .subscribe(() => this.router.navigate(["/done"]));
+      .createPlaylist(
+        playlistTitle(),
+        resources,
+        localStorage.getItem('token')!
+      )
+      .subscribe(() => this.router.navigate(['/done']));
   }
 }

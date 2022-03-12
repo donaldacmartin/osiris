@@ -8,9 +8,8 @@ describe('DoneScreenComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DoneScreenComponent ]
-    })
-    .compileComponents();
+      declarations: [DoneScreenComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

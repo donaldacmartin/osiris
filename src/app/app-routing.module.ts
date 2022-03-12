@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'load', component: LoadSubscriptionsScreenComponent },
   { path: 'select', component: VideoSelectorScreenComponent },
   { path: 'sort', component: SortScreenComponent },
-  { path: 'done', component: DoneScreenComponent }
+  { path: 'done', component: DoneScreenComponent },
 ];
 
 @NgModule({
