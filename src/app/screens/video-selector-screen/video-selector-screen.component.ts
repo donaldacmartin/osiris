@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PlaylistItem } from '../model/playlist-item';
+import { PlaylistItem } from '../../model/playlist-item';
 
 @Component({
   selector: 'app-video-selector-screen',

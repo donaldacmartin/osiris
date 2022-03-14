@@ -6,7 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./done-screen.component.css'],
 })
 export class DoneScreenComponent {
-
   constructor() {}
-
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { orderedPlaylistItems } from '../functions/compare';
-import { applyTimeConstraint } from '../functions/filter';
-import { YoutubeService } from '../service/youtube.service';
+import { orderedPlaylistItems } from '../../functions/compare';
+import { applyTimeConstraint } from '../../functions/filter';
+import { YoutubeService } from '../../service/youtube.service';
 
 @Component({
-  selector: 'app-load-subscriptions-screen',
-  templateUrl: './load-subscriptions-screen.component.html',
+  selector: 'app-load-screen',
+  templateUrl: './load-screen.component.html',
+  styleUrls: ['./load-screen.component.css'],
 })
 export class LoadSubscriptionsScreenComponent implements OnInit {
   message: String = '';
@@ -14,28 +15,22 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
   constructor(private router: Router, private youtube: YoutubeService) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('token') !== null) {
-      this.downloadSubscriptions();
-    } else {
-      this.router.navigate(['/']);
-    }
+    this.downloadSubscriptions();
   }
 
   private downloadSubscriptions() {
     this.message = 'Getting subscriptions';
 
     if (localStorage.getItem('subscriptions') == null) {
-      this.youtube
-        .getSubscriptions(localStorage.getItem('token')!)
-        .subscribe((subscriptions) => {
-          let subscriptionIds: string[] = subscriptions
-            .map((subscription) => subscription.snippet?.resourceId?.channelId)
-            .filter((id): id is string => !!id);
+      this.youtube.getSubscriptions().subscribe((subscriptions) => {
+        let subscriptionIds: string[] = subscriptions
+          .map((subscription) => subscription.snippet?.resourceId?.channelId)
+          .filter((id): id is string => !!id);
 
-          let subscriptionsStr = subscriptionIds.join(',');
-          localStorage.setItem('subscriptions', subscriptionsStr);
-          this.downloadPlaylists();
-        });
+        let subscriptionsStr = subscriptionIds.join(',');
+        localStorage.setItem('subscriptions', subscriptionsStr);
+        this.downloadPlaylists();
+      });
     } else {
       this.downloadPlaylists();
     }
@@ -46,10 +41,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
 
     if (localStorage.getItem('playlists') == null) {
       this.youtube
-        .getChannels(
-          localStorage.getItem('subscriptions')!.split(','),
-          localStorage.getItem('token')!
-        )
+        .getChannels(localStorage.getItem('subscriptions')!.split(','))
         .subscribe((channels) => {
           let playlistIds: string[] = channels
             .map((channel) => channel.contentDetails?.relatedPlaylists?.uploads)
@@ -68,10 +60,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
     this.message = 'Getting videos';
 
     this.youtube
-      .getUploadedVideos(
-        localStorage.getItem('playlists')!.split(','),
-        localStorage.getItem('token')!
-      )
+      .getUploadedVideos(localStorage.getItem('playlists')!.split(','))
       .subscribe((videos) => {
         let relevantVideos = videos
           .filter(applyTimeConstraint)

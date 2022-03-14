@@ -3,10 +3,10 @@ import {
   PlaylistItem,
   PlaylistItemResourceId,
   PlaylistItemThumbnail,
-} from '../model/playlist-item';
+} from '../../model/playlist-item';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { YoutubeService } from '../service/youtube.service';
-import { playlistTitle } from '../functions/provide';
+import { YoutubeService } from '../../service/youtube.service';
+import { playlistTitle } from '../../functions/provide';
 import { Router } from '@angular/router';
 
 @Component({
@@ -46,11 +46,7 @@ export class SortScreenComponent implements OnInit {
       );
 
     this.youtubeService
-      .createPlaylist(
-        playlistTitle(),
-        resources,
-        localStorage.getItem('token')!
-      )
+      .createPlaylist(playlistTitle(), resources)
       .subscribe(() => this.router.navigate(['/done']));
   }
 }
