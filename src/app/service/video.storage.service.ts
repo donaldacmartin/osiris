@@ -5,14 +5,26 @@ import { PlaylistItem } from '../model/playlist-item';
   providedIn: 'root',
 })
 export class VideoStorageService {
+  private loadedVideos: PlaylistItem[] = [];
   private unsortedVideos: PlaylistItem[] = [];
 
   storeLoadedVideos(videos: PlaylistItem[]): void {
+    this.loadedVideos = [];
+    this.loadedVideos.push(...videos);
+  }
+
+  getLoadedVideos(): PlaylistItem[] {
+    let loadedVideos = [];
+    loadedVideos.push(...this.loadedVideos);
+    return loadedVideos;
+  }
+
+  storeUnsortedVideos(videos: PlaylistItem[]): void {
     this.unsortedVideos = [];
     this.unsortedVideos.push(...videos);
   }
 
-  getLoadedVideos(): PlaylistItem[] {
+  getUnsortedVideos(): PlaylistItem[] {
     let unsortedVideos = [];
     unsortedVideos.push(...this.unsortedVideos);
     return unsortedVideos;

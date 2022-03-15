@@ -46,10 +46,7 @@ export class VideoSelectorScreenComponent implements OnInit {
     if (this.allVideos?.length! > 0) {
       this.currentVideo = this.allVideos?.pop();
     } else {
-      localStorage.setItem(
-        'unsortedVideos',
-        JSON.stringify(this.selectedVideos)
-      );
+      this.videoStorageService.storeUnsortedVideos(this.selectedVideos);
       this.router.navigate(['/sort']);
     }
   }

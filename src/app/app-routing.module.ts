@@ -9,6 +9,7 @@ import { SortScreenComponent } from './screens/sort-screen/sort-screen.component
 import { DoneScreenComponent } from './screens/done-screen/done-screen.component';
 import { AuthGuardService } from './guards/auth.guard.service';
 import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
+import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
 
 const routes: Routes = [
   { path: '', component: SplashScreenComponent },
@@ -26,7 +27,7 @@ const routes: Routes = [
   {
     path: 'sort',
     component: SortScreenComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [AuthGuardService, UnsortedVideosGuardService],
   },
   {
     path: 'done',

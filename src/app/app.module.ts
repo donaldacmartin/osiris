@@ -27,6 +27,7 @@ import { AuthGuardService } from './guards/auth.guard.service';
 import { AuthService } from './service/auth.service';
 import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
 import { VideoStorageService } from './service/video.storage.service';
+import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
 
 const googleKey =
   '381100539388-gheh626i6nmai4m4hgi6m7urbpf2l9a6.apps.googleusercontent.com';
@@ -80,6 +81,7 @@ const materialModules = [
         ],
       } as SocialAuthServiceConfig,
     },
+    UnsortedVideosGuardService,
     VideoStorageService,
   ],
   bootstrap: [AppComponent],
