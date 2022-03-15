@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ErrorScreenComponent } from './screens/error-screen/error-screen.component';
 import { SplashScreenComponent } from './screens/splash-screen/splash-screen.component';
 import { LoadSubscriptionsScreenComponent } from './screens/load-screen/load-screen.component';
-import { VideoSelectorScreenComponent } from './screens/video-selector-screen/video-selector-screen.component';
+import { SelectScreenComponent } from './screens/select-screen/select-screen.component';
 import { SortScreenComponent } from './screens/sort-screen/sort-screen.component';
 import { DoneScreenComponent } from './screens/done-screen/done-screen.component';
 import { AuthGuardService } from './guards/auth.guard.service';
@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'select',
-    component: VideoSelectorScreenComponent,
+    component: SelectScreenComponent,
     canActivate: [AuthGuardService, LoadedVideosGuardService],
   },
   {

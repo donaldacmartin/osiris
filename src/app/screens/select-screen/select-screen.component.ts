@@ -5,10 +5,10 @@ import { PlaylistItem } from '../../model/playlist-item';
 
 @Component({
   selector: 'app-video-selector-screen',
-  templateUrl: './video-selector-screen.component.html',
-  styleUrls: ['./video-selector-screen.component.css'],
+  templateUrl: './select-screen.component.html',
+  styleUrls: ['./select-screen.component.css'],
 })
-export class VideoSelectorScreenComponent implements OnInit {
+export class SelectScreenComponent implements OnInit {
   message = "Let's choose some videos";
   currentVideo?: PlaylistItem = undefined;
   allVideos?: PlaylistItem[] = [];

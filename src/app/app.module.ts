@@ -19,8 +19,8 @@ import { MatListModule } from '@angular/material/list';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoadSubscriptionsScreenComponent } from './screens/load-screen/load-screen.component';
 import { HttpClientModule } from '@angular/common/http';
-import { VideoSelectorScreenComponent } from './screens/video-selector-screen/video-selector-screen.component';
-import { VideoProfileViewComponent } from './screens/video-selector-screen/video-profile-view/video-profile-view.component';
+import { SelectScreenComponent } from './screens/select-screen/select-screen.component';
+import { VideoProfileViewComponent } from './screens/select-screen/video-profile-view/video-profile-view.component';
 import { SortScreenComponent } from './screens/sort-screen/sort-screen.component';
 import { DoneScreenComponent } from './screens/done-screen/done-screen.component';
 import { AuthGuardService } from './guards/auth.guard.service';
@@ -51,7 +51,7 @@ const materialModules = [
     ErrorScreenComponent,
     TitleBarComponent,
     LoadSubscriptionsScreenComponent,
-    VideoSelectorScreenComponent,
+    SelectScreenComponent,
     VideoProfileViewComponent,
     SortScreenComponent,
     DoneScreenComponent,
