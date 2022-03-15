@@ -8,6 +8,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { YoutubeService } from '../../service/youtube.service';
 import { playlistTitle } from '../../functions/provide';
 import { Router } from '@angular/router';
+import { VideoStorageService } from 'src/app/service/video.storage.service';
 
 @Component({
   selector: 'app-sort-screen',
@@ -18,11 +19,10 @@ export class SortScreenComponent implements OnInit {
   message = "Let's sort your videos";
   videos: PlaylistItem[] = [];
 
-  constructor(private youtubeService: YoutubeService, private router: Router) {}
+  constructor(private youtubeService: YoutubeService, private videoStorageService: VideoStorageService, private router: Router) {}
 
   ngOnInit(): void {
-    this.videos = JSON.parse(localStorage.getItem('unsortedVideos')!);
-    console.log(this.videos);
+    this.videos = this.videoStorageService.getUnsortedVideos();
   }
 
   getImgSrc(video: PlaylistItem): string {
