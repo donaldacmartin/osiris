@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { orderedPlaylistItems } from '../../functions/compare';
 import { applyTimeConstraint } from '../../functions/filter';
 import { YoutubeService } from '../../service/youtube.service';
@@ -12,7 +13,11 @@ import { YoutubeService } from '../../service/youtube.service';
 export class LoadSubscriptionsScreenComponent implements OnInit {
   message: String = '';
 
-  constructor(private router: Router, private youtube: YoutubeService) {}
+  constructor(
+    private router: Router,
+    private youtube: YoutubeService,
+    private videoStorageService: VideoStorageService
+  ) {}
 
   ngOnInit(): void {
     this.downloadSubscriptions();
@@ -66,7 +71,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
           .filter(applyTimeConstraint)
           .sort(orderedPlaylistItems);
 
-        localStorage.setItem('videos', JSON.stringify(relevantVideos));
+        this.videoStorageService.storeLoadedVideos(relevantVideos);
         this.router.navigate(['/select']);
       });
   }

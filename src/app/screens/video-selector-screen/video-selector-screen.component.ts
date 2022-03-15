@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { PlaylistItem } from '../../model/playlist-item';
 
 @Component({
@@ -15,10 +16,13 @@ export class VideoSelectorScreenComponent implements OnInit {
 
   selectedVideos: PlaylistItem[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private videoStorageService: VideoStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.allVideos = JSON.parse(localStorage.getItem('videos')!);
+    this.allVideos = this.videoStorageService.getLoadedVideos();
     this.initialCount = this.allVideos?.length!;
     this.currentVideo = this.allVideos?.pop();
   }

@@ -23,8 +23,10 @@ import { VideoSelectorScreenComponent } from './screens/video-selector-screen/vi
 import { VideoProfileViewComponent } from './screens/video-selector-screen/video-profile-view/video-profile-view.component';
 import { SortScreenComponent } from './screens/sort-screen/sort-screen.component';
 import { DoneScreenComponent } from './screens/done-screen/done-screen.component';
-import { AuthGuardService } from './guards/AuthGuardService';
+import { AuthGuardService } from './guards/auth.guard.service';
 import { AuthService } from './service/auth.service';
+import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
+import { VideoStorageService } from './service/video.storage.service';
 
 const googleKey =
   '381100539388-gheh626i6nmai4m4hgi6m7urbpf2l9a6.apps.googleusercontent.com';
@@ -65,6 +67,7 @@ const materialModules = [
   providers: [
     AuthGuardService,
     AuthService,
+    LoadedVideosGuardService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -77,6 +80,7 @@ const materialModules = [
         ],
       } as SocialAuthServiceConfig,
     },
+    VideoStorageService,
   ],
   bootstrap: [AppComponent],
 })
