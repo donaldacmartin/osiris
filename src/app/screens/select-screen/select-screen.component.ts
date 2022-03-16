@@ -46,8 +46,12 @@ export class SelectScreenComponent implements OnInit {
     if (this.allVideos?.length! > 0) {
       this.currentVideo = this.allVideos?.pop();
     } else {
-      this.videoStorageService.storeUnsortedVideos(this.selectedVideos);
-      this.router.navigate(['/sort']);
+      if (this.selectedVideos.length > 0) {
+        this.videoStorageService.storeUnsortedVideos(this.selectedVideos);
+        this.router.navigate(['/sort']);
+      } else {
+        this.router.navigate(['/done']);
+      }
     }
   }
 }
