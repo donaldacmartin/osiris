@@ -24,31 +24,56 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
   private downloadSubscriptions() {
     this.message = 'Getting subscriptions';
 
-    this.youtubeWrapperService
-      .getSubscribedChannelIds()
-      .subscribe((channelIds) => {
-        this.downloadPlaylists(channelIds);
-      });
+    this.youtubeWrapperService.getSubscribedChannelIds().subscribe({
+      next: (channelIds) => this.downloadPlaylists(channelIds),
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't get the channels you are subscribed to, please try again.",
+            returnUrl: '/load',
+          },
+        }),
+    });
   }
 
   private downloadPlaylists(channelIds: string[]) {
     this.message = 'Getting playlists';
 
-    this.youtubeWrapperService
-      .getUploadPlaylistIds(channelIds)
-      .subscribe((playlistIds) => {
+    this.youtubeWrapperService.getUploadPlaylistIds(channelIds).subscribe({
+      next: (playlistIds) => {
         this.downloadVideos(playlistIds);
-      });
+      },
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't get the the playlists for your subscriptions, please try again.",
+            returnUrl: '/load',
+          },
+        }),
+    });
   }
 
   private downloadVideos(playlistIds: string[]) {
     this.message = 'Getting videos';
 
-    this.youtubeWrapperService
-      .getPlaylistVideos(playlistIds)
-      .subscribe((videos) => {
+    this.youtubeWrapperService.getPlaylistVideos(playlistIds).subscribe({
+      next: (videos) => {
         this.videoStorageService.storeLoadedVideos(videos);
         this.router.navigate(['/select']);
-      });
+      },
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't get the videos your subscriptions uploaded, please try again.",
+            returnUrl: '/load',
+          },
+        }),
+    });
   }
 }
