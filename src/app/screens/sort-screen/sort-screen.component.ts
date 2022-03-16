@@ -19,7 +19,11 @@ export class SortScreenComponent implements OnInit {
   message = "Let's sort your videos";
   videos: PlaylistItem[] = [];
 
-  constructor(private youtubeService: YoutubeService, private videoStorageService: VideoStorageService, private router: Router) {}
+  constructor(
+    private youtubeService: YoutubeService,
+    private videoStorageService: VideoStorageService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.videos = this.videoStorageService.getUnsortedVideos();
