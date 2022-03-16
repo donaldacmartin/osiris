@@ -49,8 +49,17 @@ export class SortScreenComponent implements OnInit {
         (resourceId): resourceId is PlaylistItemResourceId => !!resourceId
       );
 
-    this.youtubeService
-      .createPlaylist(playlistTitle(), resources)
-      .subscribe(() => this.router.navigate(['/done']));
+    this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
+      next: () => this.router.navigate(['/done']),
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't create a playlist of your subscriptions. Please try again.",
+            returnUrl: '/sort',
+          },
+        }),
+    });
   }
 }
