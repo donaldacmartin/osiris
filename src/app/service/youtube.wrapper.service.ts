@@ -12,7 +12,7 @@ export class YoutubeWrapperService {
   constructor(private youtubeService: YoutubeService) {}
 
   public getSubscribedChannelIds(): Observable<string[]> {
-    if (localStorage.getItem('subscriptions') == null) {
+    if (localStorage.getItem('subscriptions') !== null) {
       return of(localStorage.getItem('subscriptions')!.split(','));
     } else {
       return this.youtubeService.getSubscriptions().pipe(
@@ -29,7 +29,7 @@ export class YoutubeWrapperService {
   }
 
   public getUploadPlaylistIds(channelIds: string[]): Observable<string[]> {
-    if (localStorage.getItem('playlists') == null) {
+    if (localStorage.getItem('playlists') !== null) {
       return of(localStorage.getItem('playlists')!.split(','));
     } else {
       return this.youtubeService.getChannels(channelIds).pipe(
