@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./done-screen.component.css'],
 })
 export class DoneScreenComponent {
+  title = 'All done!';
+  message = 'Come back tomorrow for another playlist';
 
   constructor() {}
-
 }

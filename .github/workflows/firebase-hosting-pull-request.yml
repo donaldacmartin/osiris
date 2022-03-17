@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   build_and_preview:
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,7 +25,7 @@ jobs:
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OSIRIS_341815 }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_OSIRIS_341815 }}"
           projectId: osiris-341815
           channelId: '${{ github.event.number }}-${{ github.event.push.after }}'

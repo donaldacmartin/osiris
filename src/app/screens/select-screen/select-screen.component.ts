@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PlaylistItem } from '../model/playlist-item';
+import { VideoStorageService } from 'src/app/service/video.storage.service';
+import { PlaylistItem } from '../../model/playlist-item';
 
 @Component({
   selector: 'app-video-selector-screen',
-  templateUrl: './video-selector-screen.component.html',
-  styleUrls: ['./video-selector-screen.component.css'],
+  templateUrl: './select-screen.component.html',
+  styleUrls: ['./select-screen.component.css'],
 })
-export class VideoSelectorScreenComponent implements OnInit {
+export class SelectScreenComponent implements OnInit {
   message = "Let's choose some videos";
   currentVideo?: PlaylistItem = undefined;
   allVideos?: PlaylistItem[] = [];
@@ -15,10 +16,13 @@ export class VideoSelectorScreenComponent implements OnInit {
 
   selectedVideos: PlaylistItem[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private videoStorageService: VideoStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.allVideos = JSON.parse(localStorage.getItem('videos')!);
+    this.allVideos = this.videoStorageService.getLoadedVideos();
     this.initialCount = this.allVideos?.length!;
     this.currentVideo = this.allVideos?.pop();
   }
@@ -42,11 +46,12 @@ export class VideoSelectorScreenComponent implements OnInit {
     if (this.allVideos?.length! > 0) {
       this.currentVideo = this.allVideos?.pop();
     } else {
-      localStorage.setItem(
-        'unsortedVideos',
-        JSON.stringify(this.selectedVideos)
-      );
-      this.router.navigate(['/sort']);
+      if (this.selectedVideos.length > 0) {
+        this.videoStorageService.storeUnsortedVideos(this.selectedVideos);
+        this.router.navigate(['/sort']);
+      } else {
+        this.router.navigate(['/done']);
+      }
     }
   }
 }

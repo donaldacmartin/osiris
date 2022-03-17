@@ -3,11 +3,12 @@ import {
   PlaylistItem,
   PlaylistItemResourceId,
   PlaylistItemThumbnail,
-} from '../model/playlist-item';
+} from '../../model/playlist-item';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { YoutubeService } from '../service/youtube.service';
-import { playlistTitle } from '../functions/provide';
+import { YoutubeService } from '../../service/youtube.service';
+import { playlistTitle } from '../../functions/provide';
 import { Router } from '@angular/router';
+import { VideoStorageService } from 'src/app/service/video.storage.service';
 
 @Component({
   selector: 'app-sort-screen',
@@ -18,11 +19,14 @@ export class SortScreenComponent implements OnInit {
   message = "Let's sort your videos";
   videos: PlaylistItem[] = [];
 
-  constructor(private youtubeService: YoutubeService, private router: Router) {}
+  constructor(
+    private youtubeService: YoutubeService,
+    private videoStorageService: VideoStorageService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.videos = JSON.parse(localStorage.getItem('unsortedVideos')!);
-    console.log(this.videos);
+    this.videos = this.videoStorageService.getUnsortedVideos();
   }
 
   getImgSrc(video: PlaylistItem): string {
@@ -45,12 +49,17 @@ export class SortScreenComponent implements OnInit {
         (resourceId): resourceId is PlaylistItemResourceId => !!resourceId
       );
 
-    this.youtubeService
-      .createPlaylist(
-        playlistTitle(),
-        resources,
-        localStorage.getItem('token')!
-      )
-      .subscribe(() => this.router.navigate(['/done']));
+    this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
+      next: () => this.router.navigate(['/done']),
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't create a playlist of your subscriptions. Please try again.",
+            returnUrl: '/sort',
+          },
+        }),
+    });
   }
 }
