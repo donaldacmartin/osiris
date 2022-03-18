@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { AuthWrapper } from '../model/auth-wrapper';
 
 @Injectable({
@@ -9,7 +8,7 @@ export class AuthService<T> {
   isAuthenticated(): boolean {
     try {
       let auth = JSON.parse(localStorage.getItem('auth')!) as AuthWrapper<T>;
-      return moment(auth.expiration).isAfter(moment());
+      return new Date(auth.expiration) > new Date();
     } catch (error) {
       return false;
     }

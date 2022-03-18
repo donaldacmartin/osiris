@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialAuthService } from 'angularx-social-login';
-import { GoogleLoginProvider } from 'angularx-social-login';
+import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
 
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-splash-screen',
@@ -12,8 +10,8 @@ import * as moment from 'moment';
   styleUrls: ['./splash-screen.component.css'],
 })
 export class SplashScreenComponent implements OnInit {
-  title: String = 'Osiris';
-  subtitle: String = 'YouTube Playlist Curator';
+  title = 'Osiris';
+  subtitle = 'YouTube Playlist Curator';
 
   constructor(
     private router: Router,
@@ -24,7 +22,7 @@ export class SplashScreenComponent implements OnInit {
   ngOnInit(): void {
     this.socialAuthService.authState.subscribe((user) => {
       if (user) {
-        let expiration = moment().add(30, 'minutes').toDate();
+        let expiration: Date = new Date(new Date().getTime() + 30 * 60000);
         this.localAuthService.setAuthentication(user.authToken, expiration);
         this.router.navigate(['/load']);
       } else {
