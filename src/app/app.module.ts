@@ -23,6 +23,8 @@ import { AuthService } from './service/auth.service';
 import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
 import { VideoStorageService } from './service/video.storage.service';
 import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const materialModules = [
   MatButtonModule,
@@ -50,6 +52,12 @@ const materialModules = [
     BrowserAnimationsModule,
     HttpClientModule,
     ...materialModules,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   exports: [...materialModules],
   providers: [
