@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CredentialResponse } from 'google-one-tap';
 import { AuthWrapper } from '../model/auth-wrapper';
 
 @Injectable({

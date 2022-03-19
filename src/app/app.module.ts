@@ -5,11 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SplashScreenComponent } from './screens/splash-screen/splash-screen.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  SocialLoginModule,
-  SocialAuthServiceConfig,
-} from 'angularx-social-login';
-import { GoogleLoginProvider } from 'angularx-social-login';
 import { ErrorScreenComponent } from './screens/error-screen/error-screen.component';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,13 +23,6 @@ import { AuthService } from './service/auth.service';
 import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
 import { VideoStorageService } from './service/video.storage.service';
 import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
-
-const googleKey =
-  '381100539388-gheh626i6nmai4m4hgi6m7urbpf2l9a6.apps.googleusercontent.com';
-
-const googleScopes = {
-  scope: 'https://www.googleapis.com/auth/youtube',
-};
 
 const materialModules = [
   MatButtonModule,
@@ -60,7 +48,6 @@ const materialModules = [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SocialLoginModule,
     HttpClientModule,
     ...materialModules,
   ],
@@ -69,18 +56,6 @@ const materialModules = [
     AuthGuardService,
     AuthService,
     LoadedVideosGuardService,
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(googleKey, googleScopes),
-          },
-        ],
-      } as SocialAuthServiceConfig,
-    },
     UnsortedVideosGuardService,
     VideoStorageService,
   ],
