@@ -132,8 +132,7 @@ export class YoutubeService {
 
     return forkJoin(responseObservables).pipe(
       reduce(
-        (acc: any[], current: any[][]) =>
-          acc.concat(...(current || [])),
+        (acc: any[], current: any[][]) => acc.concat(...(current || [])),
         []
       )
     );

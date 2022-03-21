@@ -14,7 +14,7 @@ const SUBSCRIPTIONS_URL = BASE_URL + '/subscriptions';
 const CHANNELS_URL = BASE_URL + '/channels';
 const PLAYLISTS_URL = BASE_URL + '/playlists';
 const PLAYLIST_ITEMS_URL = BASE_URL + '/playlistItems';
-const VIDEOS_URL = BASE_URL + "/videos";
+const VIDEOS_URL = BASE_URL + '/videos';
 
 const SUBSCRIPTION_PARAMS = new HttpParams()
   .set('part', 'snippet')
@@ -30,7 +30,9 @@ const PLAYLIST_PARAMS = new HttpParams()
   .set('part', 'snippet')
   .set('maxResults', 50);
 
-const VIDEO_PARAMS = new HttpParams().set('part', 'contentDetails').set('maxResults', 50);
+const VIDEO_PARAMS = new HttpParams()
+  .set('part', 'contentDetails')
+  .set('maxResults', 50);
 
 @Injectable({
   providedIn: 'root',
@@ -84,7 +86,11 @@ export class YoutubeApiService {
     );
   }
 
-  getVideoInfo(videoIds: string[], token: string, pageToken?: string): Observable<YouTubeResponse<VideoInfo>> {
+  getVideoInfo(
+    videoIds: string[],
+    token: string,
+    pageToken?: string
+  ): Observable<YouTubeResponse<VideoInfo>> {
     let videosIdsStr = videoIds.join(',');
     let paramsWithVideos = VIDEO_PARAMS.set('id', videosIdsStr);
     let params = pageToken

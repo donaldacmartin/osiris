@@ -1,7 +1,7 @@
-export class ContentDetails {
-    duration?: string;
+export class VideoInfoContentDetails {
+  duration?: string;
 }
 
 export class VideoInfo {
-    contentDetails?: ContentDetails;
+  contentDetails?: VideoInfoContentDetails;
 }

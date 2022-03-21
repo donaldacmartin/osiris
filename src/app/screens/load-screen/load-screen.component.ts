@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PlaylistItem } from 'src/app/model/playlist-item';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { YoutubeWrapperService } from 'src/app/service/youtube.wrapper.service';
 
@@ -62,10 +63,27 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
 
     this.youtubeWrapperService.getPlaylistVideos(playlistIds).subscribe({
       next: (videos) => {
-        let videoIds = videos.map(v => v.snippet?.resourceId?.videoId!);
-        this.youtubeWrapperService.getVideoInfo(videoIds).subscribe({
-          next: (data) => {console.log(data);}
-        });
+        this.supplementVideoInfo(videos);
+      },
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't get the videos your subscriptions uploaded, please try again.",
+            returnUrl: '/load',
+          },
+        }),
+    });
+  }
+
+  private supplementVideoInfo(videos: PlaylistItem[]) {
+    this.message = 'Getting extra video info';
+
+    let videoIds = videos.map((v) => v.snippet?.resourceId?.videoId!);
+    this.youtubeWrapperService.getVideoInfo(videoIds).subscribe({
+      next: (data) => {
+        console.log(data);
 
         this.videoStorageService.storeLoadedVideos(videos);
         this.router.navigate(['/select']);
@@ -75,7 +93,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
           state: {
             errorCode: 'API_ERROR',
             errorText:
-              "Couldn't get the videos your subscriptions uploaded, please try again.",
+              "Couldn't get the extra video information we need, please try again.",
             returnUrl: '/load',
           },
         }),
