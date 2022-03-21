@@ -62,6 +62,11 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
 
     this.youtubeWrapperService.getPlaylistVideos(playlistIds).subscribe({
       next: (videos) => {
+        let videoIds = videos.map(v => v.snippet?.resourceId?.videoId!);
+        this.youtubeWrapperService.getVideoInfo(videoIds).subscribe({
+          next: (data) => {console.log(data);}
+        });
+
         this.videoStorageService.storeLoadedVideos(videos);
         this.router.navigate(['/select']);
       },

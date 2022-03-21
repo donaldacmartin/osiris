@@ -6,6 +6,7 @@ import { Channel } from '../model/channel';
 import { YouTubeResponse } from '../model/generic-response';
 import { PlaylistItem, PlaylistItemResourceId } from '../model/playlist-item';
 import { YouTubePlaylistCreateResponse } from '../model/create/youtube-response';
+import { VideoInfo } from '../model/video-info';
 
 const BASE_URL = 'https://content-youtube.googleapis.com/youtube/v3';
 
@@ -13,6 +14,7 @@ const SUBSCRIPTIONS_URL = BASE_URL + '/subscriptions';
 const CHANNELS_URL = BASE_URL + '/channels';
 const PLAYLISTS_URL = BASE_URL + '/playlists';
 const PLAYLIST_ITEMS_URL = BASE_URL + '/playlistItems';
+const VIDEOS_URL = BASE_URL + "/videos";
 
 const SUBSCRIPTION_PARAMS = new HttpParams()
   .set('part', 'snippet')
@@ -27,6 +29,8 @@ const CHANNEL_PARAMS = new HttpParams()
 const PLAYLIST_PARAMS = new HttpParams()
   .set('part', 'snippet')
   .set('maxResults', 50);
+
+const VIDEO_PARAMS = new HttpParams().set('part', 'contentDetails').set('maxResults', 50);
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +82,20 @@ export class YoutubeApiService {
       PLAYLIST_ITEMS_URL,
       { headers: headers, params: params }
     );
+  }
+
+  getVideoInfo(videoIds: string[], token: string, pageToken?: string): Observable<YouTubeResponse<VideoInfo>> {
+    let videosIdsStr = videoIds.join(',');
+    let paramsWithVideos = VIDEO_PARAMS.set('id', videosIdsStr);
+    let params = pageToken
+      ? paramsWithVideos.set('pageToken', pageToken)
+      : paramsWithVideos;
+    let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.httpClient.get<YouTubeResponse<VideoInfo>>(VIDEOS_URL, {
+      headers: headers,
+      params: params,
+    });
   }
 
   createPlaylist(

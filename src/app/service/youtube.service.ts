@@ -18,6 +18,7 @@ import { YoutubeApiService } from '../api/youtube-api.service';
 import { chunk } from '../functions/transform';
 import { PlaylistItem, PlaylistItemResourceId } from '../model/playlist-item';
 import { AuthService } from './auth.service';
+import { VideoInfo } from '../model/video-info';
 
 const MAX_SUBSCRIPTIONS = 50;
 
@@ -97,6 +98,41 @@ export class YoutubeService {
     return forkJoin(playlistObservables).pipe(
       reduce(
         (acc: PlaylistItem[], current: PlaylistItem[][]) =>
+          acc.concat(...(current || [])),
+        []
+      )
+    );
+  }
+
+  getVideoInfo(videoIds: string[]): Observable<VideoInfo[]> {
+    let videoIdGroups = chunk(videoIds, MAX_SUBSCRIPTIONS);
+
+    let responseObservables: Observable<VideoInfo[]>[] = videoIdGroups.map(
+      (group) => {
+        return this.youtubeApi
+          .getVideoInfo(group, this.authService.getAuthentication())
+          .pipe(
+            expand((res) =>
+              res.nextPageToken
+                ? this.youtubeApi.getVideoInfo(
+                    group,
+                    this.authService.getAuthentication(),
+                    res.nextPageToken
+                  )
+                : EMPTY
+            ),
+            reduce(
+              (acc: VideoInfo[], current: YouTubeResponse<VideoInfo>) =>
+                acc.concat(current.items || []),
+              []
+            )
+          );
+      }
+    );
+
+    return forkJoin(responseObservables).pipe(
+      reduce(
+        (acc: any[], current: any[][]) =>
           acc.concat(...(current || [])),
         []
       )
