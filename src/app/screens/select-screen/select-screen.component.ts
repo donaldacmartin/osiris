@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AugmentedPlaylistItem } from 'src/app/model/augmented-playlist-item';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { PlaylistItem } from '../../model/playlist-item';
 
@@ -10,11 +11,11 @@ import { PlaylistItem } from '../../model/playlist-item';
 })
 export class SelectScreenComponent implements OnInit {
   message = "Let's choose some videos";
-  currentVideo?: PlaylistItem = undefined;
-  allVideos?: PlaylistItem[] = [];
+  currentVideo?: AugmentedPlaylistItem = undefined;
+  allVideos?: AugmentedPlaylistItem[] = [];
   initialCount: number = 0;
 
-  selectedVideos: PlaylistItem[] = [];
+  selectedVideos: AugmentedPlaylistItem[] = [];
 
   constructor(
     private router: Router,
@@ -25,6 +26,7 @@ export class SelectScreenComponent implements OnInit {
     this.allVideos = this.videoStorageService.getLoadedVideos();
     this.initialCount = this.allVideos?.length!;
     this.currentVideo = this.allVideos?.pop();
+    console.log(this.allVideos);
   }
 
   progress(): number {

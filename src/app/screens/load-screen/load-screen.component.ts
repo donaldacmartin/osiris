@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { augment } from 'src/app/functions/transform';
+import { AugmentedPlaylistItem } from 'src/app/model/augmented-playlist-item';
+import { PlaylistItem } from 'src/app/model/playlist-item';
+import { VideoInfo } from 'src/app/model/video-info';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { YoutubeWrapperService } from 'src/app/service/youtube.wrapper.service';
 
@@ -62,8 +66,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
 
     this.youtubeWrapperService.getPlaylistVideos(playlistIds).subscribe({
       next: (videos) => {
-        this.videoStorageService.storeLoadedVideos(videos);
-        this.router.navigate(['/select']);
+        this.supplementVideoInfo(videos);
       },
       error: () =>
         this.router.navigateByUrl('/error', {
@@ -71,6 +74,28 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
             errorCode: 'API_ERROR',
             errorText:
               "Couldn't get the videos your subscriptions uploaded, please try again.",
+            returnUrl: '/load',
+          },
+        }),
+    });
+  }
+
+  private supplementVideoInfo(videos: PlaylistItem[]) {
+    this.message = 'Getting extra video info';
+
+    let videoIds = videos.map((v) => v.snippet?.resourceId?.videoId!);
+    this.youtubeWrapperService.getVideoInfo(videoIds).subscribe({
+      next: (videoInfos) => {
+        let augmentedVideos = augment(videos, videoInfos);
+        this.videoStorageService.storeLoadedVideos(augmentedVideos);
+        this.router.navigate(['/select']);
+      },
+      error: () =>
+        this.router.navigateByUrl('/error', {
+          state: {
+            errorCode: 'API_ERROR',
+            errorText:
+              "Couldn't get the extra video information we need, please try again.",
             returnUrl: '/load',
           },
         }),

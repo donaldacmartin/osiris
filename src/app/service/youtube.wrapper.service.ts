@@ -3,6 +3,7 @@ import { map, Observable, of } from 'rxjs';
 import { orderedPlaylistItems } from '../functions/compare';
 import { applyTimeConstraint } from '../functions/filter';
 import { PlaylistItem } from '../model/playlist-item';
+import { VideoInfo } from '../model/video-info';
 import { YoutubeService } from './youtube.service';
 
 @Injectable({
@@ -53,5 +54,9 @@ export class YoutubeWrapperService {
           videos.filter(applyTimeConstraint).sort(orderedPlaylistItems)
         )
       );
+  }
+
+  public getVideoInfo(videoIds: string[]): Observable<VideoInfo[]> {
+    return this.youtubeService.getVideoInfo(videoIds);
   }
 }
