@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { augment } from 'src/app/functions/transform';
+import { AugmentedPlaylistItem } from 'src/app/model/augmented-playlist-item';
 import { PlaylistItem } from 'src/app/model/playlist-item';
+import { VideoInfo } from 'src/app/model/video-info';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { YoutubeWrapperService } from 'src/app/service/youtube.wrapper.service';
 
@@ -82,10 +85,9 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
 
     let videoIds = videos.map((v) => v.snippet?.resourceId?.videoId!);
     this.youtubeWrapperService.getVideoInfo(videoIds).subscribe({
-      next: (data) => {
-        console.log(data);
-
-        this.videoStorageService.storeLoadedVideos(videos);
+      next: (videoInfos) => {
+        let augmentedVideos = augment(videos, videoInfos);
+        this.videoStorageService.storeLoadedVideos(augmentedVideos);
         this.router.navigate(['/select']);
       },
       error: () =>

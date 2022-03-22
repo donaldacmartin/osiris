@@ -3,5 +3,6 @@ export class VideoInfoContentDetails {
 }
 
 export class VideoInfo {
+  id?: string;
   contentDetails?: VideoInfoContentDetails;
 }
