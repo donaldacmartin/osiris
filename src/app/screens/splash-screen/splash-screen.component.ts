@@ -1,10 +1,10 @@
-import { Component, NgZone, OnInit } from '@angular/core';
-
+import { Component, NgZone } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import * as auth from 'firebase/auth';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
+import { OAuthCredential } from 'firebase/auth';
 
-const CLIENT_ID =
-  '381100539388-gheh626i6nmai4m4hgi6m7urbpf2l9a6.apps.googleusercontent.com';
 const SCOPE = 'https://www.googleapis.com/auth/youtube';
 
 @Component({
@@ -12,31 +12,35 @@ const SCOPE = 'https://www.googleapis.com/auth/youtube';
   templateUrl: './splash-screen.component.html',
   styleUrls: ['./splash-screen.component.css'],
 })
-export class SplashScreenComponent implements OnInit {
+export class SplashScreenComponent {
   title = 'Osiris';
   subtitle = 'YouTube Playlist Curator';
-  client: any;
 
   constructor(
     private ngZone: NgZone,
     private router: Router,
+    private firebaseAuth: AngularFireAuth,
     private authService: AuthService<string>
   ) {}
 
-  ngOnInit(): void {
-    this.client = (window as any).google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPE,
-      callback: (response: any) =>
-        this.ngZone.run(() => {
-          let expiration: Date = new Date(new Date().getTime() + 30 * 60000);
-          this.authService.setAuthentication(response.access_token, expiration);
-          this.router.navigate(['/load']);
-        }),
-    });
-  }
+  signIn(): any {
+    let provider = new auth.GoogleAuthProvider().addScope(SCOPE);
 
-  signIn(): void {
-    this.client.requestAccessToken();
+    return this.firebaseAuth
+      .signInWithPopup(provider)
+      .then((result) => {
+        this.ngZone.run(() => {
+          let credential = result.credential as OAuthCredential;
+          let expiration: Date = new Date(new Date().getTime() + 30 * 60000);
+          this.authService.setAuthentication(
+            credential.accessToken!,
+            expiration
+          );
+          this.router.navigate(['/load']);
+        });
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
   }
 }

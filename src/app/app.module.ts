@@ -25,6 +25,8 @@ import { VideoStorageService } from './service/video.storage.service';
 import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 const materialModules = [
   MatButtonModule,
@@ -47,6 +49,8 @@ const materialModules = [
     DoneScreenComponent,
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -56,7 +60,7 @@ const materialModules = [
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   exports: [...materialModules],
