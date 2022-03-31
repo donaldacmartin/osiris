@@ -27,6 +27,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { StorageService } from './service/storage.service';
 
 const materialModules = [
   MatButtonModule,
@@ -51,6 +53,7 @@ const materialModules = [
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -69,6 +72,7 @@ const materialModules = [
     AuthService,
     LoadedVideosGuardService,
     UnsortedVideosGuardService,
+    StorageService,
     VideoStorageService,
   ],
   bootstrap: [AppComponent],

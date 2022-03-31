@@ -4,6 +4,7 @@ import * as auth from 'firebase/auth';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { OAuthCredential } from 'firebase/auth';
+import { StorageService } from 'src/app/service/storage.service';
 
 const SCOPE = 'https://www.googleapis.com/auth/youtube';
 
@@ -20,7 +21,8 @@ export class SplashScreenComponent {
     private ngZone: NgZone,
     private router: Router,
     private firebaseAuth: AngularFireAuth,
-    private authService: AuthService<string>
+    private authService: AuthService<string>,
+    private storageService: StorageService
   ) {}
 
   signIn(): any {
@@ -36,7 +38,9 @@ export class SplashScreenComponent {
             credential.accessToken!,
             expiration
           );
-          this.router.navigate(['/load']);
+
+          this.storageService.test();
+          // this.router.navigate(['/load']);
         });
       })
       .catch((error) => {
