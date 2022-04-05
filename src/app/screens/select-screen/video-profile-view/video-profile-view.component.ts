@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AugmentedPlaylistItem } from 'src/app/model/augmented-playlist-item';
-import { PlaylistItemThumbnail } from 'src/app/model/playlist-item';
+import { Video } from 'src/app/model/video';
 
 const HOURS_REGEX = /\d+H/g;
 const MINS_REGEX = /\d+M/g;
@@ -13,18 +12,9 @@ const SECS_REGEX = /\d+S/g;
 })
 export class VideoProfileViewComponent {
   @Input()
-  video?: AugmentedPlaylistItem;
+  video?: Video;
 
   constructor() {}
-
-  getImgSrc(): string {
-    let thumbnails =
-      new Map(Object.entries(this.video?.snippet?.thumbnails!)) ||
-      new Map<string, PlaylistItemThumbnail>();
-    let standardThumbnail =
-      thumbnails.get('high') || new PlaylistItemThumbnail();
-    return standardThumbnail?.url || '';
-  }
 
   getDuration(isoDuration: string): string {
     let hours = this.reMatch(HOURS_REGEX, isoDuration);

@@ -3,8 +3,8 @@
 <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
   <div *ngFor="let video of videos">
     <mat-list-item cdkDrag>
-      <img src="{{ getImgSrc(video) }}" />
-      <p class="mat-small">{{ video.snippet!.title }}</p>
+      <img src="{{ video.thumbnail }}" />
+      <p class="mat-small">{{ video.title }}</p>
       <mat-divider></mat-divider>
     </mat-list-item>
   </div>

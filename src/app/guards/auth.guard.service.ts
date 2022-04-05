@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -6,20 +7,15 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 
-import { AuthService } from '../service/auth.service';
-
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(
-    private authService: AuthService<string>,
-    private router: Router
-  ) {}
+  constructor(private firebaseAuth: AngularFireAuth, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.authService.isAuthenticated()) {
+    if (this.firebaseAuth.currentUser !== null) {
       return true;
     } else {
       this.router.navigate(['/']);

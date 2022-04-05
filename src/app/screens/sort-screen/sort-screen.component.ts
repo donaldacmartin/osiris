@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  PlaylistItem,
-  PlaylistItemResourceId,
-  PlaylistItemThumbnail,
-} from '../../model/playlist-item';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { YoutubeService } from '../../service/youtube.service';
-import { playlistTitle } from '../../functions/provide';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Video } from 'src/app/model/video';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
+import { playlistTitle } from '../../functions/provide';
+import { YoutubeService } from '../../service/youtube.service';
 
 @Component({
   selector: 'app-sort-screen',
@@ -17,7 +13,7 @@ import { VideoStorageService } from 'src/app/service/video.storage.service';
 })
 export class SortScreenComponent implements OnInit {
   message = "Let's sort your videos";
-  videos: PlaylistItem[] = [];
+  videos: Video[] = [];
 
   constructor(
     private youtubeService: YoutubeService,
@@ -26,16 +22,7 @@ export class SortScreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.videos = this.videoStorageService.getUnsortedVideos();
-  }
-
-  getImgSrc(video: PlaylistItem): string {
-    let thumbnails =
-      new Map(Object.entries(video?.snippet?.thumbnails!)) ||
-      new Map<string, PlaylistItemThumbnail>();
-    let standardThumbnail =
-      thumbnails.get('high') || new PlaylistItemThumbnail();
-    return standardThumbnail?.url || '';
+    this.videos = this.videoStorageService.getLoadedVideos();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -44,10 +31,7 @@ export class SortScreenComponent implements OnInit {
 
   done() {
     let resources = this.videos
-      .map((video) => video.snippet?.resourceId)
-      .filter(
-        (resourceId): resourceId is PlaylistItemResourceId => !!resourceId
-      );
+      .map((video) => {return {kind: "youtube#video", videoId: video.id};});
 
     this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
       next: () => this.router.navigate(['/done']),

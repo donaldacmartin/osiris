@@ -1,6 +1,6 @@
-<img src="{{ this.getImgSrc() }}" />
-<p class="mat-body-strong">{{ this.video?.snippet?.title }}</p>
+<img src="{{ video?.thumbnail }}" />
+<p class="mat-body-strong">{{ video?.title }}</p>
 <p class="mat-body">
-  {{ this.getDuration(this.video?.contentDetails?.duration!) }}
+  {{ video?.duration }}
 </p>
-<p class="mat-body">{{ this.video?.snippet?.channelTitle }}</p>
+<p class="mat-body">{{ video?.channel }}</p>

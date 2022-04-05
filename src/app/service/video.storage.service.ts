@@ -1,32 +1,44 @@
 import { Injectable } from '@angular/core';
-import { PlaylistItem } from '../model/playlist-item';
+import { Video } from '../model/video';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VideoStorageService {
-  private loadedVideos: PlaylistItem[] = [];
-  private unsortedVideos: PlaylistItem[] = [];
+  private loadedVideos: Video[] = [];
+  private acceptedVideos: Video[] = [];
+  private rejectedVideos: Video[] = [];
 
-  storeLoadedVideos(videos: PlaylistItem[]): void {
+  storeLoadedVideos(videos: Video[]): void {
     this.loadedVideos = [];
     this.loadedVideos.push(...videos);
   }
 
-  getLoadedVideos(): PlaylistItem[] {
+  getLoadedVideos(): Video[] {
     let loadedVideos = [];
     loadedVideos.push(...this.loadedVideos);
     return loadedVideos;
   }
 
-  storeUnsortedVideos(videos: PlaylistItem[]): void {
-    this.unsortedVideos = [];
-    this.unsortedVideos.push(...videos);
+  storeAcceptedVideos(videos: Video[]): void {
+    this.acceptedVideos = [];
+    this.acceptedVideos.push(...videos);
   }
 
-  getUnsortedVideos(): PlaylistItem[] {
-    let unsortedVideos = [];
-    unsortedVideos.push(...this.unsortedVideos);
-    return unsortedVideos;
+  getAcceptedVideos(): Video[] {
+    let acceptedVideos = [];
+    acceptedVideos.push(...this.acceptedVideos);
+    return acceptedVideos;
+  }
+
+  storeRejectedVideos(videos: Video[]): void {
+    this.rejectedVideos = [];
+    this.rejectedVideos.push(...videos);
+  }
+
+  getRejectedVideos(): Video[] {
+    let rejectedVideos = [];
+    rejectedVideos.push(...this.rejectedVideos);
+    return rejectedVideos;
   }
 }

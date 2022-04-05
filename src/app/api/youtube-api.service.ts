@@ -1,12 +1,15 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subscription } from '../model/subscription';
-import { Channel } from '../model/channel';
-import { YouTubeResponse } from '../model/generic-response';
-import { PlaylistItem, PlaylistItemResourceId } from '../model/playlist-item';
-import { YouTubePlaylistCreateResponse } from '../model/create/youtube-response';
-import { VideoInfo } from '../model/video-info';
+import { Subscription } from '../model/youtube/subscription';
+import { Channel } from '../model/youtube/channel';
+import { YouTubeResponse } from '../model/youtube/generic-response';
+import {
+  PlaylistItem,
+  PlaylistItemResourceId,
+} from '../model/youtube/playlist-item';
+import { YouTubePlaylistCreateResponse } from '../model/youtube/playlist-create-response';
+import { VideoInfo } from '../model/youtube/video-info';
 
 const BASE_URL = 'https://content-youtube.googleapis.com/youtube/v3';
 
@@ -31,7 +34,7 @@ const PLAYLIST_PARAMS = new HttpParams()
   .set('maxResults', 50);
 
 const VIDEO_PARAMS = new HttpParams()
-  .set('part', 'contentDetails')
+  .set('part', 'contentDetails,snippet')
   .set('maxResults', 50);
 
 @Injectable({

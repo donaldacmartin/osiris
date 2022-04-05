@@ -19,7 +19,6 @@ import { VideoProfileViewComponent } from './screens/select-screen/video-profile
 import { SortScreenComponent } from './screens/sort-screen/sort-screen.component';
 import { DoneScreenComponent } from './screens/done-screen/done-screen.component';
 import { AuthGuardService } from './guards/auth.guard.service';
-import { AuthService } from './service/auth.service';
 import { LoadedVideosGuardService } from './guards/loaded.videos.guard.service';
 import { VideoStorageService } from './service/video.storage.service';
 import { UnsortedVideosGuardService } from './guards/unsorted.videos.guard.service';
@@ -69,7 +68,6 @@ const materialModules = [
   exports: [...materialModules],
   providers: [
     AuthGuardService,
-    AuthService,
     LoadedVideosGuardService,
     UnsortedVideosGuardService,
     StorageService,

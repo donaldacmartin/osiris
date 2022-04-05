@@ -1,10 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import * as auth from 'firebase/auth';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/service/auth.service';
-import { OAuthCredential } from 'firebase/auth';
-import { StorageService } from 'src/app/service/storage.service';
+import * as auth from 'firebase/auth';
 
 const SCOPE = 'https://www.googleapis.com/auth/youtube';
 
@@ -20,9 +17,7 @@ export class SplashScreenComponent {
   constructor(
     private ngZone: NgZone,
     private router: Router,
-    private firebaseAuth: AngularFireAuth,
-    private authService: AuthService<string>,
-    private storageService: StorageService
+    private firebaseAuth: AngularFireAuth
   ) {}
 
   signIn(): any {
@@ -30,17 +25,9 @@ export class SplashScreenComponent {
 
     return this.firebaseAuth
       .signInWithPopup(provider)
-      .then((result) => {
+      .then(() => {
         this.ngZone.run(() => {
-          let credential = result.credential as OAuthCredential;
-          let expiration: Date = new Date(new Date().getTime() + 30 * 60000);
-          this.authService.setAuthentication(
-            credential.accessToken!,
-            expiration
-          );
-
-          this.storageService.test();
-          // this.router.navigate(['/load']);
+          this.router.navigate(['/load']);
         });
       })
       .catch((error) => {

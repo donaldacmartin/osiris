@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AugmentedPlaylistItem } from 'src/app/model/augmented-playlist-item';
+import { Video } from 'src/app/model/video';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
-import { PlaylistItem } from '../../model/playlist-item';
 
 @Component({
   selector: 'app-video-selector-screen',
@@ -11,11 +10,12 @@ import { PlaylistItem } from '../../model/playlist-item';
 })
 export class SelectScreenComponent implements OnInit {
   message = "Let's choose some videos";
-  currentVideo?: AugmentedPlaylistItem = undefined;
-  allVideos?: AugmentedPlaylistItem[] = [];
+  currentVideo?: Video = undefined;
   initialCount: number = 0;
 
-  selectedVideos: AugmentedPlaylistItem[] = [];
+  loadedVideos: Video[] = [];
+  acceptedVideos: Video[] = [];
+  rejectedVideos: Video[] = [];
 
   constructor(
     private router: Router,
@@ -23,33 +23,35 @@ export class SelectScreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.allVideos = this.videoStorageService.getLoadedVideos();
-    this.initialCount = this.allVideos?.length!;
-    this.currentVideo = this.allVideos?.pop();
-    console.log(this.allVideos);
+    this.loadedVideos = this.videoStorageService.getLoadedVideos();
+    this.initialCount = this.loadedVideos?.length!;
+    this.currentVideo = this.loadedVideos?.pop();
   }
 
   progress(): number {
     return (
-      ((this.initialCount - this.allVideos?.length!) / this.initialCount) * 100
+      ((this.initialCount - this.loadedVideos?.length!) / this.initialCount) * 100
     );
   }
 
   accept(): void {
-    this.selectedVideos.push(this.currentVideo!);
+    this.acceptedVideos.push(this.currentVideo!);
     this.next();
   }
 
   reject(): void {
+    this.rejectedVideos.push(this.currentVideo!);
     this.next();
   }
 
   private next(): void {
-    if (this.allVideos?.length! > 0) {
-      this.currentVideo = this.allVideos?.pop();
+    if (this.loadedVideos?.length! > 0) {
+      this.currentVideo = this.loadedVideos?.pop();
     } else {
-      if (this.selectedVideos.length > 0) {
-        this.videoStorageService.storeUnsortedVideos(this.selectedVideos);
+      this.videoStorageService.storeAcceptedVideos(this.acceptedVideos);
+      this.videoStorageService.storeRejectedVideos(this.rejectedVideos);
+
+      if (this.acceptedVideos.length > 0) {
         this.router.navigate(['/sort']);
       } else {
         this.router.navigate(['/done']);

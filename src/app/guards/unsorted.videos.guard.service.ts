@@ -18,7 +18,7 @@ export class UnsortedVideosGuardService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.videoStorageService.getUnsortedVideos().length > 0) {
+    if (this.videoStorageService.getAcceptedVideos().length > 0) {
       return true;
     } else {
       this.router.navigate(['/load']);

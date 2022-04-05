@@ -1,4 +1,4 @@
-import { PlaylistItem } from '../model/playlist-item';
+import { PlaylistItem } from '../model/youtube/playlist-item';
 
 export function applyTimeConstraint(video: PlaylistItem): boolean {
   let publishedDate = video.snippet?.publishedAt;

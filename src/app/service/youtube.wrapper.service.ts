@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { orderedPlaylistItems } from '../functions/compare';
 import { applyTimeConstraint } from '../functions/filter';
-import { PlaylistItem } from '../model/playlist-item';
-import { VideoInfo } from '../model/video-info';
+import {
+  PlaylistItem,
+  PlaylistItemThumbnail,
+} from '../model/youtube/playlist-item';
+import { Video } from '../model/video';
+import { VideoInfo } from '../model/youtube/video-info';
 import { YoutubeService } from './youtube.service';
 
 @Injectable({
@@ -29,7 +33,47 @@ export class YoutubeWrapperService {
     }
   }
 
-  public getUploadPlaylistIds(channelIds: string[]): Observable<string[]> {
+  public getVideos(channelIds: string[]): Observable<Video[]> {
+    return this.getUploadPlaylistIds(channelIds).pipe(
+      mergeMap((playlists) => {
+        return this.getPlaylistVideos(playlists).pipe(
+          mergeMap((videos) => {
+            let videoIds = videos.map((v) => v.snippet?.resourceId?.videoId!);
+
+            return this.getVideoInfo(videoIds).pipe(
+              map((videoInfos) => {
+                let videoInfoMap = videoInfos.reduce((map, videoInfo) => {
+                  map.set(videoInfo.id!, videoInfo);
+                  return map;
+                }, new Map<string, VideoInfo>());
+
+                return videos.map((v) => {
+                  let videoInfo = videoInfoMap.get(
+                    v.snippet?.resourceId?.videoId!
+                  );
+
+                  return {
+                    id: v.snippet?.resourceId?.videoId,
+                    title: v.snippet?.title,
+                    description: videoInfo?.snippet?.description,
+                    channel: v.snippet?.channelTitle,
+                    tags: videoInfo?.snippet?.tags,
+                    category: videoInfo?.snippet?.categoryId,
+                    language: videoInfo?.snippet?.language,
+                    thumbnail: this.getThumnail(v),
+                    ageAtSelection: 0,
+                    duration: 0,
+                  } as Video;
+                });
+              })
+            );
+          })
+        );
+      })
+    );
+  }
+
+  private getUploadPlaylistIds(channelIds: string[]): Observable<string[]> {
     if (localStorage.getItem('playlists') !== null) {
       return of(localStorage.getItem('playlists')!.split(','));
     } else {
@@ -46,7 +90,7 @@ export class YoutubeWrapperService {
     }
   }
 
-  public getPlaylistVideos(playlistIds: string[]): Observable<PlaylistItem[]> {
+  private getPlaylistVideos(playlistIds: string[]): Observable<PlaylistItem[]> {
     return this.youtubeService
       .getUploadedVideos(playlistIds)
       .pipe(
@@ -56,7 +100,16 @@ export class YoutubeWrapperService {
       );
   }
 
-  public getVideoInfo(videoIds: string[]): Observable<VideoInfo[]> {
+  private getVideoInfo(videoIds: string[]): Observable<VideoInfo[]> {
     return this.youtubeService.getVideoInfo(videoIds);
+  }
+
+  private getThumnail(playlistItem: PlaylistItem): string {
+    let thumbnails =
+      new Map(Object.entries(playlistItem.snippet?.thumbnails!)) ||
+      new Map<string, PlaylistItemThumbnail>();
+    let standardThumbnail =
+      thumbnails.get('high') || new PlaylistItemThumbnail();
+    return standardThumbnail?.url || '';
   }
 }
