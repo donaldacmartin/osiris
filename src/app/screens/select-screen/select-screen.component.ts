@@ -30,7 +30,8 @@ export class SelectScreenComponent implements OnInit {
 
   progress(): number {
     return (
-      ((this.initialCount - this.loadedVideos?.length!) / this.initialCount) * 100
+      ((this.initialCount - this.loadedVideos?.length!) / this.initialCount) *
+      100
     );
   }
 

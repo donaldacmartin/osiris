@@ -1,7 +1,6 @@
-import { Component, NgZone } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import * as auth from 'firebase/auth';
+import { AuthWrapperService } from 'src/app/service/auth-wrapper.service';
 
 const SCOPE = 'https://www.googleapis.com/auth/youtube';
 
@@ -15,23 +14,17 @@ export class SplashScreenComponent {
   subtitle = 'YouTube Playlist Curator';
 
   constructor(
-    private ngZone: NgZone,
     private router: Router,
-    private firebaseAuth: AngularFireAuth
+    private authWrapperService: AuthWrapperService,
   ) {}
 
   signIn(): any {
-    let provider = new auth.GoogleAuthProvider().addScope(SCOPE);
-
-    return this.firebaseAuth
-      .signInWithPopup(provider)
-      .then(() => {
-        this.ngZone.run(() => {
-          this.router.navigate(['/load']);
-        });
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
+    this.authWrapperService.signIn().subscribe(result => {
+      if (result) {
+        this.router.navigate(['/load']);
+      } else {
+        window.alert("Sign-in failed");
+      }
+    });
   }
 }

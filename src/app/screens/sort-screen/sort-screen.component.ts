@@ -30,8 +30,9 @@ export class SortScreenComponent implements OnInit {
   }
 
   done() {
-    let resources = this.videos
-      .map((video) => {return {kind: "youtube#video", videoId: video.id};});
+    let resources = this.videos.map((video) => {
+      return { kind: 'youtube#video', videoId: video.id };
+    });
 
     this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
       next: () => this.router.navigate(['/done']),

@@ -10,7 +10,7 @@ import {
   mergeMap,
   Observable,
   reduce,
-  switchMap
+  switchMap,
 } from 'rxjs';
 import { YoutubeApiService } from '../api/youtube-api.service';
 import { chunk } from '../functions/transform';
@@ -18,10 +18,11 @@ import { Channel } from '../model/youtube/channel';
 import { YouTubeResponse } from '../model/youtube/generic-response';
 import {
   PlaylistItem,
-  PlaylistItemResourceId
+  PlaylistItemResourceId,
 } from '../model/youtube/playlist-item';
 import { Subscription } from '../model/youtube/subscription';
 import { VideoInfo } from '../model/youtube/video-info';
+import { AuthWrapperService } from './auth-wrapper.service';
 
 const MAX_SUBSCRIPTIONS = 50;
 
@@ -31,7 +32,7 @@ const MAX_SUBSCRIPTIONS = 50;
 export class YoutubeService {
   constructor(
     private youtubeApi: YoutubeApiService,
-    private firebaseAuth: AngularFireAuth
+    private authWrapperService: AuthWrapperService,
   ) {}
 
   getSubscriptions(): Observable<Subscription[]> {
@@ -163,11 +164,4 @@ export class YoutubeService {
     );
   }
 
-  private getAuth(): Observable<string> {
-    this.firebaseAuth.currentUser.then(currentUser => console.log(currentUser));
-    return this.firebaseAuth.credential.pipe(mergeMap(cred => {
-      console.log(cred);
-      return (cred?.credential as OAuthCredential).accessToken!;
-    }));
-  }
 }
