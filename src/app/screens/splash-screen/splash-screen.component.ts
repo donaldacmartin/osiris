@@ -15,15 +15,15 @@ export class SplashScreenComponent {
 
   constructor(
     private router: Router,
-    private authWrapperService: AuthWrapperService,
+    private authWrapperService: AuthWrapperService
   ) {}
 
   signIn(): any {
-    this.authWrapperService.signIn().subscribe(result => {
+    this.authWrapperService.signIn().subscribe((result) => {
       if (result) {
         this.router.navigate(['/load']);
       } else {
-        window.alert("Sign-in failed");
+        window.alert('Sign-in failed');
       }
     });
   }
