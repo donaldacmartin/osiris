@@ -22,7 +22,7 @@ export class SortScreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.videos = this.videoStorageService.getLoadedVideos();
+    this.videos = this.videoStorageService.getAcceptedVideos();
   }
 
   drop(event: CdkDragDrop<string[]>) {
