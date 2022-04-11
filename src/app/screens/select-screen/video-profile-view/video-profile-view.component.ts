@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { readableDuration } from 'src/app/functions/transform';
 import { Video } from 'src/app/model/video';
 
 const HOURS_REGEX = /\d+H/g;
@@ -16,18 +17,7 @@ export class VideoProfileViewComponent {
 
   constructor() {}
 
-  getDuration(isoDuration: string): string {
-    let hours = this.reMatch(HOURS_REGEX, isoDuration);
-    let mins = this.reMatch(MINS_REGEX, isoDuration);
-    let secs = this.reMatch(SECS_REGEX, isoDuration);
-
-    return hours === '00' ? mins + ':' + secs : hours + ':' + mins + ':' + secs;
-  }
-
-  private reMatch(regex: RegExp, data: string): string {
-    let match = regex.exec(data);
-    return match && match.length > 0
-      ? match[0].substring(0, match[0].length - 1)
-      : '00';
+  getDuration(): string {
+    return readableDuration(this.video?.duration!);
   }
 }

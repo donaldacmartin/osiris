@@ -9,6 +9,7 @@ import {
 import { Video } from '../model/video';
 import { VideoInfo } from '../model/youtube/video-info';
 import { YoutubeService } from './youtube.service';
+import { parseDuration } from '../functions/transform';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +63,9 @@ export class YoutubeWrapperService {
                     language: videoInfo?.snippet?.language,
                     thumbnail: this.getThumnail(v),
                     ageAtSelection: 0,
-                    duration: 0,
+                    duration: parseDuration(
+                      videoInfo?.contentDetails?.duration!
+                    ),
                   } as Video;
                 });
               })
