@@ -10,6 +10,7 @@ import { Video } from '../model/video';
 import { VideoInfo } from '../model/youtube/video-info';
 import { YoutubeService } from './youtube.service';
 import { parseDuration } from '../functions/transform';
+import { franc } from 'franc';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +61,7 @@ export class YoutubeWrapperService {
                     channel: v.snippet?.channelTitle,
                     tags: videoInfo?.snippet?.tags,
                     category: videoInfo?.snippet?.categoryId,
-                    language: videoInfo?.snippet?.language,
+                    language: franc(videoInfo?.snippet?.description!),
                     thumbnail: this.getThumnail(v),
                     ageAtSelection: 0,
                     duration: parseDuration(

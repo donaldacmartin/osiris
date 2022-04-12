@@ -37,7 +37,6 @@ export function readableDuration(duration: number): string {
 
 function regexExtract(regex: RegExp, data: string): number {
   let match = regex.exec(data);
-  console.log(regex + ':' + match);
   return match && match.length > 0
     ? parseInt(match[0].substring(0, match[0].length - 1))
     : 0;

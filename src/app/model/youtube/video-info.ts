@@ -5,7 +5,7 @@ export class VideoInfoContentDetails {
 export class VideoInfoSnippet {
   categoryId?: string;
   description?: string;
-  language?: string;
+  defaultLanguage?: string;
   publishedAt?: string;
   tags?: string[];
 }
