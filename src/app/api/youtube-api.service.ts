@@ -10,6 +10,7 @@ import {
 } from '../model/youtube/playlist-item';
 import { YouTubePlaylistCreateResponse } from '../model/youtube/playlist-create-response';
 import { VideoInfo } from '../model/youtube/video-info';
+import { Category } from '../model/youtube/category';
 
 const BASE_URL = 'https://content-youtube.googleapis.com/youtube/v3';
 
@@ -17,6 +18,7 @@ const SUBSCRIPTIONS_URL = BASE_URL + '/subscriptions';
 const CHANNELS_URL = BASE_URL + '/channels';
 const PLAYLISTS_URL = BASE_URL + '/playlists';
 const PLAYLIST_ITEMS_URL = BASE_URL + '/playlistItems';
+const CATEGORIES_URL = BASE_URL + '/videoCategories';
 const VIDEOS_URL = BASE_URL + '/videos';
 
 const SUBSCRIPTION_PARAMS = new HttpParams()
@@ -36,6 +38,10 @@ const PLAYLIST_PARAMS = new HttpParams()
 const VIDEO_PARAMS = new HttpParams()
   .set('part', 'contentDetails,snippet')
   .set('maxResults', 50);
+
+const CATEGORIES_PARAMS = new HttpParams()
+  .set('part', 'snippet')
+  .set('regionCode', 'CA');
 
 @Injectable({
   providedIn: 'root',
@@ -102,6 +108,22 @@ export class YoutubeApiService {
     let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.httpClient.get<YouTubeResponse<VideoInfo>>(VIDEOS_URL, {
+      headers: headers,
+      params: params,
+    });
+  }
+
+  getCategories(
+    token: string,
+    pageToken?: string
+  ): Observable<YouTubeResponse<Category>> {
+    let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    let params = pageToken
+      ? CATEGORIES_PARAMS.set('pageToken', pageToken)
+      : CATEGORIES_PARAMS;
+
+    return this.httpClient.get<YouTubeResponse<Category>>(CATEGORIES_URL, {
       headers: headers,
       params: params,
     });

@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { YoutubeApiService } from '../api/youtube-api.service';
 import { chunk } from '../functions/transform';
+import { Category } from '../model/youtube/category';
 import { Channel } from '../model/youtube/channel';
 import { YouTubeResponse } from '../model/youtube/generic-response';
 import {
@@ -97,6 +98,24 @@ export class YoutubeService {
           acc.concat(...(current || [])),
         []
       )
+    );
+  }
+
+  getCategories(): Observable<Map<number, string>> {
+    let auth = this.authWrapperService.getToken();
+
+    return this.youtubeApi.getCategories(auth).pipe(
+      expand((res) =>
+        res.nextPageToken
+          ? this.youtubeApi.getCategories(auth, res.nextPageToken)
+          : EMPTY
+      ),
+      reduce((acc: Map<number, string>, current: YouTubeResponse<Category>) => {
+        current.items?.forEach((item) => {
+          acc.set(item.id, item.snippet.title);
+        });
+        return acc;
+      }, new Map<number, string>())
     );
   }
 

@@ -36,39 +36,47 @@ export class YoutubeWrapperService {
   }
 
   public getVideos(channelIds: string[]): Observable<Video[]> {
-    return this.getUploadPlaylistIds(channelIds).pipe(
-      mergeMap((playlists) => {
-        return this.getPlaylistVideos(playlists).pipe(
-          mergeMap((videos) => {
-            let videoIds = videos.map((v) => v.snippet?.resourceId?.videoId!);
+    return this.youtubeService.getCategories().pipe(
+      mergeMap((categories) => {
+        return this.getUploadPlaylistIds(channelIds).pipe(
+          mergeMap((playlists) => {
+            return this.getPlaylistVideos(playlists).pipe(
+              mergeMap((videos) => {
+                let videoIds = videos.map(
+                  (v) => v.snippet?.resourceId?.videoId!
+                );
 
-            return this.getVideoInfo(videoIds).pipe(
-              map((videoInfos) => {
-                let videoInfoMap = videoInfos.reduce((map, videoInfo) => {
-                  map.set(videoInfo.id!, videoInfo);
-                  return map;
-                }, new Map<string, VideoInfo>());
+                return this.getVideoInfo(videoIds).pipe(
+                  map((videoInfos) => {
+                    let videoInfoMap = videoInfos.reduce((map, videoInfo) => {
+                      map.set(videoInfo.id!, videoInfo);
+                      return map;
+                    }, new Map<string, VideoInfo>());
 
-                return videos.map((v) => {
-                  let videoInfo = videoInfoMap.get(
-                    v.snippet?.resourceId?.videoId!
-                  );
+                    return videos.map((v) => {
+                      let videoInfo = videoInfoMap.get(
+                        v.snippet?.resourceId?.videoId!
+                      );
 
-                  return {
-                    id: v.snippet?.resourceId?.videoId,
-                    title: v.snippet?.title,
-                    description: videoInfo?.snippet?.description,
-                    channel: v.snippet?.channelTitle,
-                    tags: videoInfo?.snippet?.tags,
-                    category: videoInfo?.snippet?.categoryId,
-                    language: franc(videoInfo?.snippet?.description!),
-                    thumbnail: this.getThumnail(v),
-                    ageAtSelection: 0,
-                    duration: parseDuration(
-                      videoInfo?.contentDetails?.duration!
-                    ),
-                  } as Video;
-                });
+                      return {
+                        id: v.snippet?.resourceId?.videoId,
+                        title: v.snippet?.title,
+                        description: videoInfo?.snippet?.description,
+                        channel: v.snippet?.channelTitle,
+                        tags: videoInfo?.snippet?.tags,
+                        category: categories.get(
+                          videoInfo?.snippet?.categoryId!
+                        ),
+                        language: franc(videoInfo?.snippet?.description!),
+                        thumbnail: this.getThumnail(v),
+                        ageAtSelection: 0,
+                        duration: parseDuration(
+                          videoInfo?.contentDetails?.duration!
+                        ),
+                      } as Video;
+                    });
+                  })
+                );
               })
             );
           })
