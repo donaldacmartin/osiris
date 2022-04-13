@@ -58,8 +58,6 @@ export class YoutubeWrapperService {
                         v.snippet?.resourceId?.videoId!
                       );
 
-                      console.log(videoInfo!);
-
                       return {
                         id: v.snippet?.resourceId?.videoId,
                         title: v.snippet?.title,
@@ -75,6 +73,7 @@ export class YoutubeWrapperService {
                         duration: parseDuration(
                           videoInfo?.contentDetails?.duration!
                         ),
+                        placeInList: -1,
                       } as Video;
                     });
                   })

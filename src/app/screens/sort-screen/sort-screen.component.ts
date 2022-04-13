@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Video } from 'src/app/model/video';
+import { StorageService } from 'src/app/service/storage.service';
 import { VideoStorageService } from 'src/app/service/video.storage.service';
 import { playlistTitle } from '../../functions/provide';
 import { YoutubeService } from '../../service/youtube.service';
@@ -18,6 +19,7 @@ export class SortScreenComponent implements OnInit {
   constructor(
     private youtubeService: YoutubeService,
     private videoStorageService: VideoStorageService,
+    private storageService: StorageService,
     private router: Router
   ) {}
 
@@ -33,6 +35,8 @@ export class SortScreenComponent implements OnInit {
     let resources = this.videos.map((video) => {
       return { kind: 'youtube#video', videoId: video.id };
     });
+
+    this.storageService.saveVideos(this.videos);
 
     this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
       next: () => this.router.navigate(['/done']),
