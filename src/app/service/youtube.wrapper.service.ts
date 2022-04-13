@@ -58,6 +58,8 @@ export class YoutubeWrapperService {
                         v.snippet?.resourceId?.videoId!
                       );
 
+                      console.log(videoInfo!);
+
                       return {
                         id: v.snippet?.resourceId?.videoId,
                         title: v.snippet?.title,
@@ -69,7 +71,7 @@ export class YoutubeWrapperService {
                         ),
                         language: franc(videoInfo?.snippet?.description!),
                         thumbnail: this.getThumnail(v),
-                        ageAtSelection: 0,
+                        ageAtSelection: this.getAge(videoInfo!),
                         duration: parseDuration(
                           videoInfo?.contentDetails?.duration!
                         ),
@@ -124,4 +126,9 @@ export class YoutubeWrapperService {
       thumbnails.get('high') || new PlaylistItemThumbnail();
     return standardThumbnail?.url || '';
   }
+
+  private getAge(videoInfo: VideoInfo): number {
+    return new Date().getTime() - new Date(videoInfo?.snippet?.publishedAt!).getTime();
+  }
+
 }

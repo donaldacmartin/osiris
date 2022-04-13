@@ -14,6 +14,7 @@ export class VideoProfileViewComponent {
   constructor() {}
 
   getDuration(): string {
+    console.log(this.video!);
     return readableDuration(this.video?.duration!);
   }
 }

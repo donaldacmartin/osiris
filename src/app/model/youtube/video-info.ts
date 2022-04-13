@@ -6,7 +6,7 @@ export class VideoInfoSnippet {
   categoryId?: number;
   description?: string;
   defaultLanguage?: string;
-  publishedAt?: string;
+  publishedAt?: Date;
   tags?: string[];
 }
 
