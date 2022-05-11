@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthWrapperService } from 'src/app/service/auth-wrapper.service';
 
@@ -9,7 +9,7 @@ const SCOPE = 'https://www.googleapis.com/auth/youtube';
   templateUrl: './splash-screen.component.html',
   styleUrls: ['./splash-screen.component.css'],
 })
-export class SplashScreenComponent {
+export class SplashScreenComponent implements OnInit {
   title = 'Osiris';
   subtitle = 'YouTube Playlist Curator';
 
@@ -18,13 +18,17 @@ export class SplashScreenComponent {
     private authWrapperService: AuthWrapperService
   ) {}
 
+  ngOnInit(): void {
+    this.authWrapperService
+      .hasAuthenticatedFromRedirect()
+      .subscribe((result) => {
+        if (result) {
+          this.router.navigate(['/load']);
+        }
+      });
+  }
+
   signIn(): any {
-    this.authWrapperService.signIn().subscribe((result) => {
-      if (result) {
-        this.router.navigate(['/load']);
-      } else {
-        window.alert('Sign-in failed');
-      }
-    });
+    this.authWrapperService.signIn();
   }
 }

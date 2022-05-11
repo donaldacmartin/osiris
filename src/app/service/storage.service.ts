@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {
-  AngularFirestore
-} from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Video } from '../model/video';
 
 @Injectable({
@@ -15,17 +13,15 @@ export class StorageService {
   ) {}
 
   public saveVideos(videos: Video[]): void {
-    let today = new Date().toISOString().split("T")[0];
+    let today = new Date().toISOString().split('T')[0];
 
     this.firebaseAuth.currentUser.then((user) => {
-      let jsObject = videos.map(video => Object.assign({}, video));
+      let jsObject = videos.map((video) => Object.assign({}, video));
 
-      this
-        .fireStore
+      this.fireStore
         .collection('training')
         .doc(user?.uid)
-        .update({[today]: jsObject});
+        .update({ [today]: jsObject });
     });
   }
-
 }

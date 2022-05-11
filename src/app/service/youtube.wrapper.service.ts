@@ -127,7 +127,9 @@ export class YoutubeWrapperService {
   }
 
   private getAge(videoInfo: VideoInfo): number {
-    return new Date().getTime() - new Date(videoInfo?.snippet?.publishedAt!).getTime();
+    return (
+      new Date().getTime() -
+      new Date(videoInfo?.snippet?.publishedAt!).getTime()
+    );
   }
-
 }

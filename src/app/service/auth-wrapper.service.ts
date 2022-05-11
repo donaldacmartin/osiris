@@ -1,6 +1,6 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 import { OAuthCredential } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
 
@@ -12,26 +12,32 @@ const SCOPE = 'https://www.googleapis.com/auth/youtube';
 export class AuthWrapperService {
   private token: string = '';
 
-  constructor(private firebaseAuth: AngularFireAuth, private ngZone: NgZone) {}
+  constructor(private firebaseAuth: AngularFireAuth) {}
 
-  signIn(): Observable<boolean> {
-    let provider: AuthProvider = new GoogleAuthProvider().addScope(SCOPE);
+  signIn(): void {
+    let provider = new GoogleAuthProvider().addScope(SCOPE);
+    this.firebaseAuth.signInWithRedirect(provider);
+  }
 
-    let promise: Promise<boolean> = this.firebaseAuth
-      .signInWithPopup(provider)
+  hasAuthenticatedFromRedirect(): Observable<boolean> {
+    let promise = this.firebaseAuth
+      .getRedirectResult()
       .then((result) => {
-        return this.ngZone.run(() => {
+        if (result !== null && result.credential !== null) {
           let credential = result.credential as OAuthCredential;
 
           if (credential.accessToken) {
             this.token = credential.accessToken;
             return true;
-          } else {
-            return false;
           }
-        });
+
+          return false;
+        }
+
+        return false;
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         return false;
       });
 

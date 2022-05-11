@@ -14,7 +14,7 @@ export class LoadSubscriptionsScreenComponent implements OnInit {
   constructor(
     private router: Router,
     private youtubeWrapperService: YoutubeWrapperService,
-    private videoStorageService: VideoStorageService,
+    private videoStorageService: VideoStorageService
   ) {}
 
   ngOnInit(): void {
