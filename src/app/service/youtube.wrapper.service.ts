@@ -53,29 +53,31 @@ export class YoutubeWrapperService {
                       return map;
                     }, new Map<string, VideoInfo>());
 
-                    return videos.map((v) => {
-                      let videoInfo = videoInfoMap.get(
-                        v.snippet?.resourceId?.videoId!
-                      );
+                    return videos
+                      .map((v) => {
+                        let videoInfo = videoInfoMap.get(
+                          v.snippet?.resourceId?.videoId!
+                        );
 
-                      return {
-                        id: v.snippet?.resourceId?.videoId,
-                        title: v.snippet?.title,
-                        description: videoInfo?.snippet?.description,
-                        channel: v.snippet?.channelTitle,
-                        tags: videoInfo?.snippet?.tags,
-                        category: categories.get(
-                          videoInfo?.snippet?.categoryId!
-                        ),
-                        language: franc(videoInfo?.snippet?.description!),
-                        thumbnail: this.getThumnail(v),
-                        ageAtSelection: this.getAge(videoInfo!),
-                        duration: parseDuration(
-                          videoInfo?.contentDetails?.duration!
-                        ),
-                        placeInList: -1,
-                      } as Video;
-                    });
+                        return {
+                          id: v.snippet?.resourceId?.videoId,
+                          title: v.snippet?.title,
+                          description: videoInfo?.snippet?.description,
+                          channel: v.snippet?.channelTitle,
+                          tags: videoInfo?.snippet?.tags,
+                          category: categories.get(
+                            videoInfo?.snippet?.categoryId!
+                          ),
+                          language: franc(videoInfo?.snippet?.description!),
+                          thumbnail: this.getThumnail(v),
+                          ageAtSelection: this.getAge(videoInfo!),
+                          duration: parseDuration(
+                            videoInfo?.contentDetails?.duration!
+                          ),
+                          placeInList: -1,
+                        } as Video;
+                      })
+                      .filter((v) => v.duration > 0);
                   })
                 );
               })
