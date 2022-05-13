@@ -36,6 +36,10 @@ export class SortScreenComponent implements OnInit {
       return { kind: 'youtube#video', videoId: video.id };
     });
 
+    Array
+      .from(Array(this.videos.length).keys())
+      .forEach(i => {this.videos[i].placeInList = i;});
+
     this.storageService.saveVideos(this.videos);
 
     this.youtubeService.createPlaylist(playlistTitle(), resources).subscribe({
