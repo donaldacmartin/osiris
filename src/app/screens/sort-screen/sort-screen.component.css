@@ -20,6 +20,11 @@ mat-list-item[aria-selected="true"] {
   background-color: #888;
 }
 
+.cdk-drop-list-dragging .cdk-drag {
+  /* Adapted from https://trungk18.com/ */
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
 .cdk-drag-preview {
   display: none;
 }
