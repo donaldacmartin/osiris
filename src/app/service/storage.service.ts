@@ -16,12 +16,13 @@ export class StorageService {
     let today = new Date().toISOString().split('T')[0];
 
     this.firebaseAuth.currentUser.then((user) => {
-      let jsObject = videos.map((video) => Object.assign({}, video));
+      console.log(user);
+      console.log(today);
 
       this.fireStore
         .collection('training')
         .doc(user?.uid)
-        .update({ [today]: jsObject });
+        .update({ [today]: JSON.parse(JSON.stringify(videos)) });
     });
   }
 }

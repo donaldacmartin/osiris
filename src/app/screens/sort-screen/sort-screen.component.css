@@ -16,6 +16,11 @@ img {
   padding-top: 1em;
 }
 
+mat-list {
+  height: 75vh;
+  overflow: auto;
+}
+
 mat-list-item[aria-selected="true"] {
   background-color: #888;
 }
