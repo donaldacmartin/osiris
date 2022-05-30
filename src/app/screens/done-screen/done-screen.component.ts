@@ -17,6 +17,4 @@ export class DoneScreenComponent {
   restart() {
     this.router.navigate([this.reloadUri]);
   }
-
 }
-
