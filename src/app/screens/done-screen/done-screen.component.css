@@ -11,3 +11,13 @@
 p {
   text-align: center;
 }
+
+button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 5em;
+  margin-top: 1em;
+  width: 1.5em;
+  height: 1.5em;
+}
